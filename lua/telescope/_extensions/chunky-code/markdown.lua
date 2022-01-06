@@ -1,5 +1,5 @@
--- TODO use pcall for require?
-local curl = require("plenary.curl")
+local has_curl, curl = pcall(require, "plenary.curl")
+if not has_curl then error("This plugin requires nvim-lua/plenary.nvim") end
 
 local M = {}
 
