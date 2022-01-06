@@ -3,7 +3,7 @@ if not has_curl then error("This plugin requires nvim-lua/plenary.nvim") end
 
 local M = {}
 
-local README = [[
+local SAMPLE_MARKDOWN_FOR_DEVELOPMENT = [[
 # telescope.nvim
 
 ### Installation
@@ -31,28 +31,19 @@ use {
 ```
 ]]
 
--- TODO add filename in opts
---   "/README.md",
---   "/README.markdown",
---   "/readme.md",
---   "/Readme.md",
-
---[[
--- TODO Telescope chunky-code repo=chip/dotfiles
---]]
---
-
 function M.fetch(opts)
-  -- print("fetch opts")
-  -- print(inspect(opts))
   opts = opts or {}
-  -- local url = 'https://raw.githubusercontent.com/' .. opts.repo ..
-  --               '/master/README.md'
-  --
-  -- local res = curl.request({url = url, method = "get", accept = "text/plain"})
-  --
-  -- return res.body
-  return README
+  if opts.development then
+    return SAMPLE_MARKDOWN_FOR_DEVELOPMENT
+  else
+    local service = opts.service or 'https://raw.githubusercontent.com/'
+    local file = opts.file or 'README.md'
+    local branch = opts.branch or 'master'
+    local url = service .. opts.repo .. '/' .. branch .. '/' .. file
+
+    local res = curl.request({url = url, method = "get", accept = "text/plain"})
+    return res.body
+  end
 end
 
 return M
