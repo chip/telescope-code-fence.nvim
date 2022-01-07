@@ -3,6 +3,7 @@ local finders = require "telescope.finders"
 local conf = require("telescope.config").values
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
+local popup = require "plenary/popup"
 local chunky_code_markdown = require "chunky-code/markdown"
 local chunky_code_parser = require "chunky-code/parser"
 
@@ -14,6 +15,15 @@ M.find = function(opts)
 
   opts.data = chunky_code_markdown.fetch(opts)
   local results = chunky_code_parser.parse(opts)
+
+  if (not next(results)) then
+    popup.create("Error: chunky-code.nvim received no results from parsing.", {})
+  end
+
+  if (type(results) ~= "table") then
+    popup.create("Error: chunky-code.nvim was unable to display results: \n" ..
+                   results, {})
+  end
 
   pickers.new(opts, {
     prompt_title = "CHUNKY CODE!",
