@@ -8,6 +8,7 @@ local chunky_code_markdown = require "chunky-code/markdown"
 local chunky_code_parser = require "chunky-code/parser"
 
 local M = {}
+-- TODO add .setup fn?
 
 M.find = function(opts)
   opts = vim.tbl_extend('keep', opts or {},
