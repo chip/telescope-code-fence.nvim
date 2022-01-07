@@ -24,9 +24,10 @@ M.parse = function(opts)
   local writer = lunamark.writer.generic.new()
   writer.newline = "\n"
 
-  function writer.fenced_code(s, _)
+  function writer.fenced_code(s, i)
     local lines = s:split()
-    local fence = {lines[1], lines}
+    -- print(vim.inspect(i))
+    local fence = {lines[1], lines, i}
     table.insert(fences, fence)
     return s
   end
