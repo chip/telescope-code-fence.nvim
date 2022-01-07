@@ -29,7 +29,7 @@ M.find = function(opts)
   end
 
   pickers.new(opts, {
-    prompt_title = "CHUNKY CODE!",
+    prompt_title = "--[[ CHUNKY CODE ]]--",
     finder = finders.new_table {
       results = results,
       entry_maker = function(entry)
