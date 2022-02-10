@@ -1,3 +1,4 @@
+print("find.lua !!!")
 local pickers = require "telescope.pickers"
 local finders = require "telescope.finders"
 local conf = require("telescope.config").values
@@ -5,27 +6,46 @@ local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local putils = require('telescope.previewers.utils')
-local popup = require "plenary/popup"
-local chunky_code_markdown = require "chunky-code/markdown"
-local chunky_code_parser = require "chunky-code/parser"
+local chunky_code_markdown =
+  require "lua/telescope/_extensions/chunky-code/markdown"
+local chunky_code_parser =
+  require "lua/telescope/_extensions/chunky-code/parser"
 
 local M = {}
--- TODO add .setup fn?
+M._setup = function(opts)
+  print("inside find.lua setup()")
+  return true
+end
 
 M.find = function(opts)
-  opts = vim.tbl_extend('keep', opts or {},
+  print("inside find func")
+  print("opts", opts)
+  opts = vim.tbl_extend("keep", opts or {},
                         require("telescope.themes").get_dropdown {})
+  print("opts after tbl_extend", opts)
 
   opts.data = chunky_code_markdown.fetch(opts)
+  print("opts.data", opts.data)
+  print(vim.inspect(opts))
+
+  if (not opts.data) then
+    vim.api.nvim_err_writeln(
+      "[ERROR chunky-code.nvim] fetch returned no results. Try a different file or repo.")
+    return false
+  end
   local results = chunky_code_parser.parse(opts)
 
-  if (not next(results)) then
-    popup.create("Error: chunky-code.nvim received no results from parsing.", {})
+  if (not results) then
+    vim.api.nvim_err_writeln(
+      "[ERROR chunky-code.nvim] parser returned no results. Try a different file or repo.")
+    return false
   end
 
   if (type(results) ~= "table") then
-    popup.create("Error: chunky-code.nvim was unable to display results: \n" ..
-                   results, {})
+    vim.api.nvim_err_writeln(
+      "[ERROR chunky-code.nvim] parser results were unreadable. Try a different file or repo." ..
+        results)
+    return false
   end
 
   pickers.new(opts, {
