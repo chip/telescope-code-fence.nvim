@@ -13,8 +13,8 @@ endfunction
 
 " Reload the plugin
 nnoremap <Leader>rp :call ReloadPlugin()<CR>
-" Test the plugin
-nnoremap <Leader>rr :Telescope chunky-code find repo=ryanb/dotfiles file=README.md
+" Test the plugin using TODO 
+nnoremap <Leader>rr :Telescope chunky-code find development=true file=README.md repo=ryanb/dotfiles 
 
 " Inital load
 lua <<EOF

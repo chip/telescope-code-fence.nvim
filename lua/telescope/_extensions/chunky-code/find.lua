@@ -1,4 +1,3 @@
-print("find.lua !!!")
 local pickers = require "telescope.pickers"
 local finders = require "telescope.finders"
 local conf = require("telescope.config").values
@@ -6,27 +5,15 @@ local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local putils = require('telescope.previewers.utils')
-local chunky_code_markdown =
-  require "lua/telescope/_extensions/chunky-code/markdown"
-local chunky_code_parser =
-  require "lua/telescope/_extensions/chunky-code/parser"
+local chunky_code_markdown = require "chunky-code.markdown"
+local chunky_code_parser = require "chunky-code.parser"
 
 local M = {}
-M._setup = function(opts)
-  print("inside find.lua setup()")
-  return true
-end
 
 M.find = function(opts)
-  print("inside find func")
-  print("opts", opts)
   opts = vim.tbl_extend("keep", opts or {},
                         require("telescope.themes").get_dropdown {})
-  print("opts after tbl_extend", opts)
-
   opts.data = chunky_code_markdown.fetch(opts)
-  print("opts.data", opts.data)
-  print(vim.inspect(opts))
 
   if (not opts.data) then
     vim.api.nvim_err_writeln(
