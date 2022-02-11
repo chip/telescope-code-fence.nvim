@@ -1,4 +1,5 @@
-" FOR DEVELOPMENT 
+" FOR DEVELOPMENT
+" Run from /path/to/paste-code-fences/lua/telescope/_extensions directory:
 " nvim --cmd "set rtp+=$(pwd)" -u plugin/dev.vim
 
 function! ReloadPlugin()
@@ -13,7 +14,7 @@ endfunction
 
 " Reload the plugin
 nnoremap <Leader>rp :call ReloadPlugin()<CR>
-" Test the plugin using TODO 
+" Test the plugin using Github repository ryanb/dotfiles as an example
 nnoremap <Leader>rr :Telescope chunky-code find development=true file=README.md repo=ryanb/dotfiles 
 
 " Inital load
