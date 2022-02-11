@@ -5,32 +5,32 @@ local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local putils = require('telescope.previewers.utils')
-local chunky_code_markdown = require "chunky-code.markdown"
-local chunky_code_parser = require "chunky-code.parser"
+local paste-code-fences_markdown = require "paste-code-fences.markdown"
+local paste-code-fences_parser = require "paste-code-fences.parser"
 
 local M = {}
 
 M.find = function(opts)
   opts = vim.tbl_extend("keep", opts or {},
                         require("telescope.themes").get_dropdown {})
-  opts.data = chunky_code_markdown.fetch(opts)
+  opts.data = paste-code-fences_markdown.fetch(opts)
 
   if (not opts.data) then
     vim.api.nvim_err_writeln(
-      "[ERROR chunky-code.nvim] fetch returned no results. Try a different file or repo.")
+      "[ERROR paste-code-fences.nvim] fetch returned no results. Try a different file or repo.")
     return false
   end
-  local results = chunky_code_parser.parse(opts)
+  local results = paste-code-fences_parser.parse(opts)
 
   if (not results) then
     vim.api.nvim_err_writeln(
-      "[ERROR chunky-code.nvim] parser returned no results. Try a different file or repo.")
+      "[ERROR paste-code-fences.nvim] parser returned no results. Try a different file or repo.")
     return false
   end
 
   if (type(results) ~= "table") then
     vim.api.nvim_err_writeln(
-      "[ERROR chunky-code.nvim] parser results were unreadable. Try a different file or repo." ..
+      "[ERROR paste-code-fences.nvim] parser results were unreadable. Try a different file or repo." ..
         results)
     return false
   end
