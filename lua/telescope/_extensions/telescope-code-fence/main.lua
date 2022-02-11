@@ -5,11 +5,11 @@ local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local putils = require('telescope.previewers.utils')
-local markdown = require "paste-code-fences.markdown"
-local parser = require "paste-code-fences.parser"
+local markdown = require "telescope-code-fence.markdown"
+local parser = require "telescope-code-fence.parser"
 
 local error = function(s)
-  return "[ERROR paste-code-fences.nvim] " .. s ..
+  return "[ERROR telescope-code-fence.nvim] " .. s ..
            " Try a different file or repo."
 end
 

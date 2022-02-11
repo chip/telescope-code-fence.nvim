@@ -3,5 +3,5 @@ if not has_telescope then
   error("This plugin requires nvim-telescope/telescope.nvim")
 end
 
-local main = require("telescope._extensions.paste-code-fences.main")
+local main = require("telescope._extensions.telescope-code-fence.main")
 return telescope.register_extension {exports = {find = main.find}}
