@@ -5,8 +5,9 @@ local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local putils = require('telescope.previewers.utils')
-local markdown = require "telescope-code-fence.markdown"
-local parser = require "telescope-code-fence.parser"
+
+local markdown = require "telescope/_extensions/telescope-code-fence/markdown"
+local parser = require "telescope/_extensions/telescope-code-fence/parser"
 
 local error = function(s)
   return "[ERROR telescope-code-fence.nvim] " .. s ..
@@ -40,7 +41,7 @@ M.find = function(opts)
   end
 
   pickers.new(opts, {
-    prompt_title = "--[[ CHUNKY CODE ]]--",
+    prompt_title = "telescope-code-fence",
     finder = finders.new_table {
       results = results,
       entry_maker = function(entry)
