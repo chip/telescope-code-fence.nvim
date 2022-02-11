@@ -1,3 +1,7 @@
+local home = os.getenv("HOME")
+package.path = home .. "/.luarocks/share/lua/5.1/?.lua;" .. package.path
+package.cpath = home .. "/.luarocks/lib/lua/5.1/?.so;" .. package.cpath
+
 local has_lunamark, lunamark = pcall(require, "lunamark")
 if not has_lunamark then
   local msg = [[
