@@ -45,6 +45,12 @@ M.parse = function(opts)
   })
   local _, _ = reader(opts.data)
 
+  if next(fences) == nil and opts.data then
+    local lines = opts.data:split()
+    local fence = {"unknown text", lines, ""}
+    table.insert(fences, fence)
+  end
+
   return fences
 end
 

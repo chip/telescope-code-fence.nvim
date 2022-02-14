@@ -6,12 +6,24 @@ local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local putils = require('telescope.previewers.utils')
 
-local markdown = require "telescope/_extensions/telescope-code-fence/markdown"
-local parser = require "telescope/_extensions/telescope-code-fence/parser"
+local markdown = require "telescope._extensions.telescope-code-fence.markdown"
+local parser = require "telescope._extensions.telescope-code-fence.parser"
+require("telescope._extensions.telescope-code-fence.debug-put")
 
-local error = function(s)
-  return "[ERROR telescope-code-fence.nvim] " .. s ..
-           " Try a different file or repo."
+local format_msg =
+  function(s) return "[ERROR telescope-code-fence.nvim] " .. s end
+
+local function error(s) vim.api.nvim_err_writeln(format_msg(s)) end
+
+local function ask(prompt)
+  if not prompt then
+    error("Please enter a string when prompted")
+    return false
+  end
+  local response = ''
+  local on_confirm = function(input) response = input end
+  vim.ui.input({prompt = prompt}, on_confirm)
+  return response
 end
 
 local M = {}
@@ -19,24 +31,34 @@ local M = {}
 M.find = function(opts)
   opts = vim.tbl_extend("keep", opts or {},
                         require("telescope.themes").get_dropdown {})
+  if not opts.repo then
+    opts.repo = ask("Enter Github user/repo (example: ryanb/dotfiles): ")
+    if not opts.repo then
+      error("Please run plugin again and enter a repo name when prompted.")
+      return false
+    end
+  end
+
+  if not opts.file then
+    local response = ask(
+                       "Enter file name (or press enter to use default README.md): ")
+    opts.file = response or "README.md"
+  end
   opts.data = markdown.fetch(opts)
 
   if (not opts.data) then
-    local msg = error("fetch returned no results.")
-    vim.api.nvim_err_writeln(msg)
+    error("fetch returned no results.")
     return false
   end
   local results = parser.parse(opts)
 
   if (not results) then
-    local msg = error("parser returned no results.")
-    vim.api.nvim_err_writeln(msg)
+    error("parser returned no results.")
     return false
   end
 
   if (type(results) ~= "table") then
-    local msg = error("parser results were unreadable.")
-    vim.api.nvim_err_writeln(msg .. results)
+    error("parser results were unreadable." .. results)
     return false
   end
 
