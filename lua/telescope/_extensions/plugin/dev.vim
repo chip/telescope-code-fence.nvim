@@ -5,7 +5,7 @@
 function! ReloadPlugin()
 lua << EOF
   for k in pairs(package.loaded) do 
-    if k:match("^telescope-code-fence") then
+    if k:match("telescope%-code%-fence.main") then
       package.loaded[k] = nil
     end
   end
