@@ -47,7 +47,8 @@ M.parse = function(opts)
 
   if next(fences) == nil and opts.data then
     local lines = opts.data:split()
-    local fence = {"unknown text", lines, ""}
+    local label = lines[1] or "[found 1 code fence of unspecified language]"
+    local fence = {label, lines, ""}
     table.insert(fences, fence)
   end
 

@@ -1,3 +1,4 @@
+echo "lua/telescope/_extensions/plugin/telescope-code-fence.vim"
 if exists('g:loaded_telescope_code_fence') | finish | endif " prevent loading file twice
 let s:save_cpo = &cpo " save user coptions
 set cpo&vim           " reset them to defaults

@@ -20,6 +20,7 @@ filepath, and then adding the following somewhere after your
 `init.lua`) :
 
 ```lua
+-- TODO verify correctness
 require('telescope').load_extension('telescope-code-fence')
 ```
 ## Setup
@@ -44,11 +45,13 @@ nnoremap <Leader>cf <cmd>Telescope telescope-code-fence file=readme.md repo=nvim
 ### Available Functions
 
 ```lua
+-- TODO verify correctness
 require'telescope'.extensions.telescope-code-fence.find{}
 ```
 ### Development
 
 ```zsh
+-- TODO verify correctness
 $ git clone git@github.com:chip/telescope-code-fence.nvim.git
 $ cd telescope-code-fence/lua/telescope/_extensions
 $ nvim --cmd "set rtp+=$(pwd)" -u plugin/dev.vim

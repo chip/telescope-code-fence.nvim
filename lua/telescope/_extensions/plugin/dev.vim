@@ -1,12 +1,11 @@
 " FOR DEVELOPMENT
-" Run from /path/to/telescope-code-fence/lua/telescope/_extensions directory:
-" TODO is plugin/ the proper path or lua/telescope/_extensions/plugin?
-" nvim --cmd "set rtp+=$(pwd)" -u plugin/dev.vim
+" nvim --cmd "set rtp+=$(pwd)" -u lua/telescope/_extensions/plugin/dev.vim
+set rtp+=$(pwd)
 
 function! ReloadPlugin()
 lua << EOF
   for k in pairs(package.loaded) do
-    if k:match("telescope%-code%-fence.main") then
+    if k:match("telescope%-code%-fence") then
       package.loaded[k] = nil
     end
   end
@@ -15,9 +14,10 @@ endfunction
 
 " Reload the plugin
 nnoremap <Leader>rp :call ReloadPlugin()<CR>
-" Test the plugin using Github repository ryanb/dotfiles as an example
-nnoremap <Leader>rf :Telescope telescope-code-fence find
-nnoremap <Leader>rd :Telescope telescope-code-fence find development=true file=README.md repo=ryanb/dotfiles
+" Test the plugin
+nnoremap <Leader>rf :Telescope telescope-code-fence find<CR>
+" Test the plugin in development mode using file README.md on Github repository ryanb/dotfiles (as an example)
+nnoremap <Leader>rd :Telescope telescope-code-fence find development=true file=README.md repo=ryanb/dotfiles<CR>
 
 " Inital load
 lua <<EOF
