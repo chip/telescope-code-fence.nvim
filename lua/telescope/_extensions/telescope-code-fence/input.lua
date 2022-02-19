@@ -1,7 +1,5 @@
 local M = {}
 
-local utils = require("telescope._extensions.telescope-code-fence.utils")
-
 M.ask = function(prompt)
   local response = ''
   local on_confirm = function(input) response = input end
@@ -9,23 +7,22 @@ M.ask = function(prompt)
   return response
 end
 
-M.prompt_user = function(opts)
-  if not opts.repo then
-    opts.repo = M.ask("Enter Github user/repo (example: ryanb/dotfiles): ")
-    utils.pp("prompt_user repo = %s", opts.repo)
-    if not opts.repo then
-      error("Please run plugin again and enter a repo name when prompted.")
-    end
+M.ask_for_repo = function()
+  local repo = M.ask("Enter Github user/repo (example: ryanb/dotfiles): ")
+  if repo == nil or repo == '' then
+    error("Please run plugin again and enter a repo name when prompted.", 1)
   end
+  return repo
+end
 
-  if not opts.file then
-    local response = M.ask(
-                       "Enter file name (or press enter to use default README.md): ")
-    opts.file = response or "README.md"
-    utils.pp("opts.file = %s", opts.file)
+M.ask_for_file = function()
+  local file = M.ask(
+                 "Enter file name (or press enter to use default README.md): ")
+  if file == nil or file == '' then
+    return "README.md"
+  else
+    return file
   end
-
-  return opts
 end
 
 return M
