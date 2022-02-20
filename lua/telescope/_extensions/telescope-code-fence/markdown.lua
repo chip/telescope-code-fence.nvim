@@ -5,11 +5,16 @@ local utils = require("telescope._extensions.telescope-code-fence.utils")
 
 local M = {}
 
+-- opts = {
+--   repo = "chip/dotfiles" -- add test for empty/nil repo
+--   file = "README" -- or don't pass in file property
+--   fetch_service = inject curl as dependency
+-- }
 function M.fetch(opts)
-  utils.pp("inside fetch opts", opts)
   if opts == nil or opts.repo == nil then
-    utils.error("woops")
-    return
+    local err = "Please run plugin again and enter a repo name when prompted."
+    utils.error(err)
+    return nil, err
   end
 
   opts = opts or {}
@@ -25,7 +30,6 @@ function M.fetch(opts)
     local url = service .. opts.repo .. '/' .. branch .. '/' .. file
 
     local res = curl.request({url = url, method = "get", accept = "text/plain"})
-    utils.pp("M.fetch res = %s", res)
     if res.status ~= 200 then
       utils.error(string.format("Fetch failed with status: %s. Error: %s",
                                 res.status, res.body))

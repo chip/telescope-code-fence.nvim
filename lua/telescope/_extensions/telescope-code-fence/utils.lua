@@ -5,6 +5,9 @@ M.pp = function(format, s)
   return print(string.format(fmt, vim.inspect(s)))
 end
 M.format_msg = function(s) return "[ERROR telescope-code-fence.nvim] " .. s end
-M.error = function(s) vim.api.nvim_err_writeln(M.format_msg(s)) end
+M.error = function(s)
+  local msg = M.format_msg(s)
+  vim.api.nvim_err_writeln(msg)
+end
 
 return M
