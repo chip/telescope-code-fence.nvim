@@ -6,7 +6,7 @@ if not has_lunamark then
   local msg = [[
     This plugin requires http://jgm.github.io/lunamark.
 
-    Run from project root directory:
+    Run from telescope-code-fence.nvim directory:
       make install
 
     Or install manually to ~/.luarocks:
