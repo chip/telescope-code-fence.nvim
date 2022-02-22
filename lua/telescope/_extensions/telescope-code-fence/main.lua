@@ -18,7 +18,6 @@ require("telescope._extensions.telescope-code-fence.debug-put")
 local M = {}
 
 M.find = function(telescope_opts)
-  utils.pp("find opts %s", telescope_opts)
   telescope_opts = vim.tbl_extend("keep", telescope_opts or {},
                                   require("telescope.themes").get_dropdown {})
   local repo, file, text, fences, err
@@ -38,7 +37,6 @@ M.find = function(telescope_opts)
       return
     end
   end
-  utils.pp("file %s", file)
 
   local opts = {repo = repo, file = file, fetch_service = curl}
 
@@ -47,10 +45,7 @@ M.find = function(telescope_opts)
     utils.error(err)
     return
   end
-  opts.text = text
-  utils.pp("parser.parse({ text = %s })", text)
-  fences, err = parser.parse(opts)
-  utils.pp("after parser.parse %s", fences)
+  fences, err = parser.parse(text)
 
   if err then
     utils.error(err)

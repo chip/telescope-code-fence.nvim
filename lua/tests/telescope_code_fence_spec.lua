@@ -104,8 +104,6 @@ describe("tcf_data", function()
       eq(err, nil)
     end)
 
-    pending("[found 1 code fence of unspecified language]")
-
   end)
 
 end)
@@ -204,8 +202,7 @@ describe("tcf_url", function()
         fetch_service = fake_curl
       })
       eq(nil, actual)
-      eq(err,
-         "[ERROR telescope-code-fence.nvim] Fetch failed for Github repo chip/dotfiles with 404 not found\n")
+      eq(err, "Fetch failed for Github repo chip/dotfiles with 404 not found")
     end)
 
   end)

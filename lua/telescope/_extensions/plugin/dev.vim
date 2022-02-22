@@ -16,8 +16,8 @@ endfunction
 nnoremap <Leader>rp :call ReloadPlugin()<CR>
 " Test the plugin
 nnoremap <Leader>rf :Telescope telescope-code-fence find<CR>
-" Test the plugin in development mode using file README.md on Github repository ryanb/dotfiles (as an example)
-nnoremap <Leader>rd :Telescope telescope-code-fence find development=true file=README.md repo=ryanb/dotfiles<CR>
+" Test the plugin in using file README.md on Github repository ryanb/dotfiles (as an example)
+nnoremap <Leader>rd :Telescope telescope-code-fence find file=README.md repo=ryanb/dotfiles<CR>
 
 " Inital load
 lua <<EOF
