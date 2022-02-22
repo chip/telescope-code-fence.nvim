@@ -48,11 +48,6 @@ require('telescope').load_extension('telescope-code-fence')
 nnoremap <Leader>cf <cmd>Telescope telescope-code-fence
 ```
 
-### Available Functions
-
-```lua
-require'telescope'.extensions.telescope-code-fence.find
-```
 ### Development
 
 ```zsh
