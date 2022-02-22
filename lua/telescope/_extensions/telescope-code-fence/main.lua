@@ -13,7 +13,6 @@ local tcf_url = require "telescope._extensions.telescope-code-fence.url"
 local parser = require "telescope._extensions.telescope-code-fence.parser"
 local input = require("telescope._extensions.telescope-code-fence.input")
 local utils = require("telescope._extensions.telescope-code-fence.utils")
-require("telescope._extensions.telescope-code-fence.debug-put")
 
 local M = {}
 
