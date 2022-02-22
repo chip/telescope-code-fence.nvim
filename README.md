@@ -44,7 +44,7 @@ require('telescope').load_extension('telescope-code-fence')
 ### Bind to Keys:
 
 ```vim
-" Replace <Leader>cf with whatever you prefer. Modify string after repo= to whatever github user/repo you prefer.
+" Replace <Leader>cf with whatever you prefer
 nnoremap <Leader>cf <cmd>Telescope telescope-code-fence
 ```
 
