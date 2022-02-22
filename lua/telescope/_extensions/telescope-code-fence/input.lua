@@ -10,7 +10,7 @@ end
 M.ask_for_repo = function()
   local repo = M.ask("Enter Github user/repo (example: ryanb/dotfiles): ")
   if repo == nil or repo == '' then
-    error("Please run plugin again and enter a repo name when prompted.", 1)
+    return nil, "Please run plugin again and enter a repo name when prompted."
   end
   return repo
 end

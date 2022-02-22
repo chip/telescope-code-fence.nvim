@@ -1,36 +1,47 @@
+local home = os.getenv("HOME")
+local pwd = os.getenv('PWD')
+package.path = pwd .. "/../fixtures/?;" .. package.path
+package.path = home .. "/.luarocks/share/lua/5.1/?.lua;" .. package.path
+package.cpath = home .. "/.luarocks/lib/lua/5.1/?.so;" .. package.cpath
+local TEXT_WITHOUT_CODE_FENCES = require(
+                                   "tests.fixtures.TEXT_WITHOUT_CODE_FENCES")
+local MARKDOWN = require("tests.fixtures.MARKDOWN")
 local spy = require("luassert.spy")
--- local mock = require("luassert.mock")
 local eq = assert.are.same
 local tcf_input = require("telescope._extensions.telescope-code-fence.input")
-local tcf_data = require("telescope._extensions.telescope-code-fence.markdown")
 local tcf_url = require("telescope._extensions.telescope-code-fence.url")
+-- TODO rename file
+local tcf_data = require("telescope._extensions.telescope-code-fence.parser")
 
 local missing_repo_msg =
   "Please run plugin again and enter a repo name when prompted."
 
 describe("tcf_input", function()
-  describe(".ask_for_repo()", function()
-    it("returns stubbed data from input.ask()", function()
+  describe(".ask_for_repo", function()
+    it("returns stubbed data from input.ask", function()
       tcf_input.ask = spy.new(function() return "blah/blah" end)
       eq("blah/blah", tcf_input.ask_for_repo())
       tcf_input.ask:revert()
     end)
 
-    it("has error when stubbed data from input.ask() is empty", function()
+    it("returns error when stubbed data from input.ask is empty", function()
       tcf_input.ask = spy.new(function() return "" end)
-      assert.has.errors(tcf_input.ask_for_repo, missing_repo_msg)
+      local actual, err = tcf_input.ask_for_repo()
+      eq(actual, nil)
+      eq(err, missing_repo_msg)
       tcf_input.ask:revert()
     end)
   end)
 
-  describe(".ask_for_file()", function()
-    it("returns stubbed data from input.ask()", function()
+  describe(".ask_for_file", function()
+    it("returns stubbed data from input.ask", function()
       tcf_input.ask = spy.new(function() return "readme" end)
       eq("readme", tcf_input.ask_for_file())
       tcf_input.ask:revert()
     end)
 
-    it("has error when stubbed data from input.ask() is empty", function()
+    it("returns default README.md when stubbed data from input.ask is empty",
+       function()
       tcf_input.ask = spy.new(function() return "" end)
       eq("README.md", tcf_input.ask_for_file())
       tcf_input.ask:revert()
@@ -39,25 +50,71 @@ describe("tcf_input", function()
 end)
 
 describe("tcf_data", function()
-  describe(".fetch()", function()
-    pending("has error when repo is not defined",
-            function() assert.has.errors(tcf_data.fetch, missing_repo_msg) end)
-
-    it("writes error to nvim command line when repo is not defined", function()
-      local msg = "[ERROR telescope-code-fence.nvim] " .. missing_repo_msg
-      vim.api.nvim_err_writeln = spy.new(function() end)
-      tcf_data.fetch()
-      assert.spy(vim.api.nvim_err_writeln).was.called_with(msg)
-      vim.api.nvim_err_writeln:revert()
+  describe(".parse", function()
+    it("returns error when text is not defined", function()
+      local msg = "parsing failed due to lack of data"
+      local actual, err = tcf_data.parse()
+      eq(actual, nil)
+      eq(err, msg)
     end)
+
+    it(
+      "returns default table when stubbed text does not contain markdown code fences",
+      function()
+        local actual, err = tcf_data.parse(TEXT_WITHOUT_CODE_FENCES)
+        local expected = {
+          {
+            "dotfiles for osx",
+            {
+              "dotfiles for osx",
+              "Currently using the following:",
+              "* iTerm2 terminal",
+              "* Terminal theme: Profiles->Colors->Color Presets...-> srcery_iterm"
+            },
+            ""
+          }
+        }
+        eq(expected, actual)
+        eq(err, nil)
+      end)
+
+    it("returns table of fences after using stubbed markdown", function()
+      local actual, err = tcf_data.parse(MARKDOWN)
+      local expected = {
+        {
+          "call dein#add('nvim-lua/plenary.nvim')",
+          {
+            "call dein#add('nvim-lua/plenary.nvim')",
+            "call dein#add('nvim-telescope/telescope.nvim')"
+          },
+          "viml"
+        },
+        {
+          "use {",
+          {
+            "use {",
+            "  'nvim-telescope/telescope.nvim',",
+            "  requires = { {'nvim-lua/plenary.nvim'} }",
+            "}"
+          },
+          "lua"
+        }
+      }
+      eq(expected, actual)
+      eq(err, nil)
+    end)
+
+    pending("[found 1 code fence of unspecified language]")
+
   end)
+
 end)
 
 -- Like Go: return result, error_message
 -- SUCCESS: return "some data", nil
 -- FAILURE: return nil, "wuh-oze"
 describe("tcf_url", function()
-  describe(".build()", function()
+  describe(".build", function()
     it("returns error when passed in no args", function()
       local actual, err = tcf_url.build()
       eq(actual, nil)
@@ -116,4 +173,41 @@ describe("tcf_url", function()
       eq(err, nil)
     end)
   end)
+
+  describe(".fetch", function()
+    it("has error when repo is not defined", function()
+      local actual, err = tcf_url.fetch()
+      eq(actual, nil)
+      eq(err, missing_repo_msg)
+    end)
+
+    it("returns body when stubbed request is successful", function()
+      local fake_curl = {
+        request = function() return {status = 200, body = "whassup"} end
+      }
+      local actual, err = tcf_url.fetch({
+        repo = "chip/dotfiles",
+        fetch_service = fake_curl
+      })
+      eq("whassup", actual)
+      eq(err, nil)
+    end)
+
+    it("returns error when stubbed request returns failure status", function()
+      local fake_curl = {
+        request = function()
+          return {status = 404, body = "404 not found"}
+        end
+      }
+      local actual, err = tcf_url.fetch({
+        repo = "chip/dotfiles",
+        fetch_service = fake_curl
+      })
+      eq(nil, actual)
+      eq(err,
+         "[ERROR telescope-code-fence.nvim] Fetch failed for Github repo chip/dotfiles with 404 not found\n")
+    end)
+
+  end)
+
 end)

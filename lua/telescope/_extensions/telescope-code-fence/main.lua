@@ -1,3 +1,6 @@
+local has_curl, curl = pcall(require, "plenary.curl")
+if not has_curl then error("This plugin requires nvim-lua/plenary.nvim") end
+
 local pickers = require "telescope.pickers"
 local finders = require "telescope.finders"
 local conf = require("telescope.config").values
@@ -6,7 +9,7 @@ local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local putils = require('telescope.previewers.utils')
 -- require telescope-code-fence specific modules
-local markdown = require "telescope._extensions.telescope-code-fence.markdown"
+local tcf_url = require "telescope._extensions.telescope-code-fence.url"
 local parser = require "telescope._extensions.telescope-code-fence.parser"
 local input = require("telescope._extensions.telescope-code-fence.input")
 local utils = require("telescope._extensions.telescope-code-fence.utils")
@@ -18,56 +21,46 @@ M.find = function(telescope_opts)
   utils.pp("find opts %s", telescope_opts)
   telescope_opts = vim.tbl_extend("keep", telescope_opts or {},
                                   require("telescope.themes").get_dropdown {})
+  local repo, file, text, fences, err
 
-  local opts = {}
-
-  -- TODO decide repo data type. currently prompt_user returns an opts table
-  local has_repo, repo = pcall(input.prompt_user, opts)
-  print(string.format("has_repo %s", has_repo))
-  print(string.format("repo %s", repo))
-  if not has_repo then
-    utils.error(repo)
+  repo, err = input.ask_for_repo()
+  if err then
+    utils.error(err)
     return
   end
-  opts.repo = repo
-  utils.pp("DEBUG opts %s", opts)
 
-  -- local repo = input.prompt_user(opts)
-  -- utils.pp("after prompt_user %s", repo)
-  -- if not repo then return end
+  if telescope_opts.file then
+    file = telescope_opts.file
+  else
+    file, err = input.ask_for_file()
+    if err then
+      utils.error(err)
+      return
+    end
+  end
+  utils.pp("file %s", file)
 
-  -- local data = markdown.fetch(opts)
-  -- utils.pp("after markdown.fetch %s", data)
-  local has_data, data = pcall(markdown.fetch, opts)
-  print(string.format("has_data %s", has_data))
-  print(string.format("data %s", data))
-  if not has_data then
-    utils.error(data)
+  local opts = {repo = repo, file = file, fetch_service = curl}
+
+  text, err = tcf_url.fetch(opts)
+  if err then
+    utils.error(err)
     return
   end
-  opts.data = data
+  opts.text = text
+  utils.pp("parser.parse({ text = %s })", text)
+  fences, err = parser.parse(opts)
+  utils.pp("after parser.parse %s", fences)
 
-  -- if (not data) then
-  --   utils.error("fetch returned no results.")
-  --   return false
-  -- end
-  local results = parser.parse(opts)
-  utils.pp("after parser.parse %s", results)
-
-  if (not results) then
-    utils.error("parser returned no results.")
-    return false
-  end
-
-  if (type(results) ~= "table") then
-    utils.error("parser results were unreadable." .. results)
-    return false
+  if err then
+    utils.error(err)
+    return
   end
 
   pickers.new(telescope_opts, {
     prompt_title = "telescope-code-fence",
     finder = finders.new_table {
-      results = results,
+      results = fences,
       entry_maker = function(entry)
         return {value = entry, display = entry[1], ordinal = entry[1]}
       end

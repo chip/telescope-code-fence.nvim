@@ -1,7 +1,6 @@
 local home = os.getenv("HOME")
 package.path = home .. "/.luarocks/share/lua/5.1/?.lua;" .. package.path
 package.cpath = home .. "/.luarocks/lib/lua/5.1/?.so;" .. package.cpath
-
 local has_lunamark, lunamark = pcall(require, "lunamark")
 if not has_lunamark then
   local msg = [[
@@ -26,7 +25,10 @@ function string:split(sep)
   return fields
 end
 
-M.parse = function(opts)
+M.parse = function(text)
+  if text == '' or text == nil then
+    return nil, "parsing failed due to lack of data"
+  end
   local fences = {}
 
   local writer = lunamark.writer.generic.new()
@@ -43,10 +45,10 @@ M.parse = function(opts)
     smart = true,
     fenced_code_blocks = true
   })
-  local _, _ = reader(opts.data)
+  local _, _ = reader(text)
 
-  if next(fences) == nil and opts.data then
-    local lines = opts.data:split()
+  if next(fences) == nil and text then
+    local lines = text:split()
     local label = lines[1] or "[found 1 code fence of unspecified language]"
     local fence = {label, lines, ""}
     table.insert(fences, fence)
