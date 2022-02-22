@@ -5,7 +5,7 @@ extension will fetch and parse text files from [Github](https://github.com)
 and provide a list of **[Markdown Code
 Fences](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks)**
 that you can paste into an nvim buffer. It will fetch a **README.md** file by
-default, but this can be changed by calling the function using a `file=` option
+default, but this can be changed when prompted by the plugin.
 (see **Commands** section below for details.)
 
 ## Requirements
@@ -16,10 +16,10 @@ default, but this can be changed by calling the function using a `file=` option
 
 ## Install
 
-You can install the extension by cloning this repository somewhere on your
-filepath, and then adding the following somewhere after your
-`require('telescope').setup()` call in your configuration file (`init.vim` or
-`init.lua`) :
+You can install the extension by using
+[packer.nvim](https://github.com/wbthomason/packer.nvim) or by cloning this
+repository somewhere on your filepath, and then adding the following somewhere
+after telescope in your configuration file (`init.vim` or `init.lua`).
 
 ### Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 ```lua
