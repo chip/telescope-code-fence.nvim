@@ -1,8 +1,5 @@
-local home = os.getenv("HOME")
 local pwd = os.getenv('PWD')
 package.path = pwd .. "/../fixtures/?;" .. package.path
-package.path = home .. "/.luarocks/share/lua/5.1/?.lua;" .. package.path
-package.cpath = home .. "/.luarocks/lib/lua/5.1/?.so;" .. package.cpath
 local TEXT_WITHOUT_CODE_FENCES = require(
                                    "tests.fixtures.TEXT_WITHOUT_CODE_FENCES")
 local MARKDOWN = require("tests.fixtures.MARKDOWN")
@@ -10,8 +7,7 @@ local spy = require("luassert.spy")
 local eq = assert.are.same
 local tcf_input = require("telescope._extensions.telescope-code-fence.input")
 local tcf_url = require("telescope._extensions.telescope-code-fence.url")
--- TODO rename file
-local tcf_data = require("telescope._extensions.telescope-code-fence.parser")
+local tcf_data = require("telescope._extensions.telescope-code-fence.data")
 
 local missing_repo_msg =
   "Please run plugin again and enter a repo name when prompted."
