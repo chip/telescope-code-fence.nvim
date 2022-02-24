@@ -16,10 +16,20 @@ default, but this can be changed when prompted by the plugin.
 
 ## Install
 
-You can install the extension by using
-[packer.nvim](https://github.com/wbthomason/packer.nvim) or by cloning this
-repository somewhere on your filepath, and then adding the following somewhere
-after telescope in your configuration file (`init.vim` or `init.lua`).
+You can install the extension by using your plugin manager of choice or by
+cloning this repository somewhere on your filepath, and then adding the
+following somewhere after telescope in your configuration file (`init.vim` or
+`init.lua`).
+
+### Using [Paq](https://github.com/savq/paq-nvim)
+```lua
+require "paq" {
+  { 'nvim-lua/plenary.nvim' };
+  { 'nvim-telescope/telescope.nvim' };
+  { "chip/telescope-code-fence.nvim", run = 'make install' };
+}
+require('telescope').load_extension('telescope-code-fence');
+```
 
 ### Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 ```lua
@@ -27,7 +37,7 @@ use 'nvim-lua/plenary.nvim'
 use 'nvim-telescope/telescope.nvim'
 use {
   "chip/telescope-code-fence.nvim",
-  run = 'cd telescope-code-fence.nvim && make install'
+  run = 'make install'
 }
 require('telescope').load_extension('telescope-code-fence')
 ```
@@ -38,7 +48,7 @@ require('telescope').load_extension('telescope-code-fence')
 ```vim
 " Prompts user for Github user/repo
 " Prompts for file argument, but uses README.md as default
-:Telescope telescope-code-fence
+:Telescope telescope-code-fence find
 ```
 
 ### Bind to Keys:
@@ -57,7 +67,6 @@ $ nvim --cmd "set rtp+=$(pwd)" -u plugin/dev.vim
 ```
 ## TODO
 
-* Run `make install` hook for Packer
 * Add animated gif to demonstrate plugin use
 * Add social template per Github Pages
 * Add working healthcheck
