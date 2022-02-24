@@ -1,5 +1,7 @@
 # telescope-code-fence.nvim
 
+![telescope-code-fence.nvim DEMO](assets/telescope-code-fence-demo.gif "telescope-code-fence.nvim DEMO")
+
 This [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 extension will fetch and parse text files from [Github](https://github.com)
 and provide a list of **[Markdown Code
