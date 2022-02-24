@@ -10,7 +10,7 @@ local previewers = require "telescope.previewers"
 local putils = require('telescope.previewers.utils')
 -- require telescope-code-fence specific modules
 local tcf_url = require "telescope._extensions.telescope-code-fence.url"
-local tcf_data = require "telescope._extensions.telescope-code-fence.parser"
+local tcf_data = require "telescope._extensions.telescope-code-fence.data"
 local tcf_input = require("telescope._extensions.telescope-code-fence.input")
 local utils = require("telescope._extensions.telescope-code-fence.utils")
 
