@@ -69,6 +69,5 @@ $ nvim --cmd "set rtp+=$(pwd)" -u plugin/dev.vim
 ```
 ## TODO
 
-* Add animated gif to demonstrate plugin use
 * Add social template per Github Pages
 * Add working healthcheck
