@@ -10,8 +10,8 @@ local previewers = require "telescope.previewers"
 local putils = require('telescope.previewers.utils')
 -- require telescope-code-fence specific modules
 local tcf_url = require "telescope._extensions.telescope-code-fence.url"
-local parser = require "telescope._extensions.telescope-code-fence.parser"
-local input = require("telescope._extensions.telescope-code-fence.input")
+local tcf_data = require "telescope._extensions.telescope-code-fence.parser"
+local tcf_input = require("telescope._extensions.telescope-code-fence.input")
 local utils = require("telescope._extensions.telescope-code-fence.utils")
 
 local M = {}
@@ -21,7 +21,7 @@ M.find = function(telescope_opts)
                                   require("telescope.themes").get_dropdown {})
   local repo, file, text, fences, err
 
-  repo, err = input.ask_for_repo()
+  repo, err = tcf_input.ask_for_repo()
   if err then
     utils.error(err)
     return
@@ -30,7 +30,7 @@ M.find = function(telescope_opts)
   if telescope_opts.file then
     file = telescope_opts.file
   else
-    file, err = input.ask_for_file()
+    file, err = tcf_input.ask_for_file()
     if err then
       utils.error(err)
       return
@@ -44,7 +44,7 @@ M.find = function(telescope_opts)
     utils.error(err)
     return
   end
-  fences, err = parser.parse(text)
+  fences, err = tcf_data.parse(text)
 
   if err then
     utils.error(err)
