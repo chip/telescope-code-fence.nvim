@@ -57,7 +57,7 @@ require('telescope').load_extension('telescope-code-fence')
 
 ```vim
 " Replace <Leader>cf with whatever you prefer
-nnoremap <Leader>cf <cmd>Telescope telescope-code-fence
+nnoremap <Leader>cf <cmd>Telescope telescope-code-fence find
 ```
 
 ### Development
