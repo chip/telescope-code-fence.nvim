@@ -4,4 +4,7 @@ if not has_telescope then
 end
 
 local main = require("telescope._extensions.telescope-code-fence.main")
-return telescope.register_extension {exports = {find = main.find}}
+local health = require("telescope._extensions.telescope-code-fence.health")
+return telescope.register_extension {
+  exports = {find = main.find, health = health.check}
+}
