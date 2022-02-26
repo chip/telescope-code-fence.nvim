@@ -14,7 +14,6 @@ end
 
 M.check = function()
   health.report_start("Start health check for telescope-code-fence.nvim")
-  health.report_info(string.format("Current time: %s", os.clock()))
   if vim_installed() then
     health.report_ok("nvim version >= 0.6 installed")
   else

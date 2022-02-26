@@ -70,4 +70,3 @@ $ nvim --cmd "set rtp+=$(pwd)" -u plugin/dev.vim
 ## TODO
 
 * Add social template per Github Pages
-* Add working healthcheck
