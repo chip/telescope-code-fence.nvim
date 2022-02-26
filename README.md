@@ -26,8 +26,8 @@ following somewhere after telescope in your configuration file (`init.vim` or
 ### Using [Paq](https://github.com/savq/paq-nvim)
 ```lua
 require "paq" {
-  { 'nvim-lua/plenary.nvim' };
-  { 'nvim-telescope/telescope.nvim' };
+  'nvim-lua/plenary.nvim';
+  'nvim-telescope/telescope.nvim';
   { "chip/telescope-code-fence.nvim", run = 'make install' };
 }
 require('telescope').load_extension('telescope-code-fence');
