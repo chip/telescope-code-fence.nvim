@@ -1,6 +1,6 @@
 " FOR DEVELOPMENT
 " nvim --cmd "set rtp+=$(pwd)" -u lua/telescope/_extensions/plugin/dev.vim
-set rtp+=$(pwd)
+set rtp+=.
 
 function! ReloadPlugin()
 lua << EOF
